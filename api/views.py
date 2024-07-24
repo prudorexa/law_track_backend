@@ -7,14 +7,9 @@ from rest_framework import status
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth import get_user_model
-
+from django.contrib.auth.tokens import default_token_generator
 from .models import CustomUser
 from .serializers import CustomUserSerializer, LoginSerializer, PasswordResetSerializer
-from django.contrib.auth.tokens import default_token_generator
-
-from rest_framework import generics
-from .models import CustomUser
-from .serializers import CustomUserSerializer
 from .permissions import IsAdminUser, IsClientUser
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -27,11 +22,22 @@ class AdminOnlyView(generics.ListCreateAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = [IsAdminUser]
 
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
 class ClientOnlyView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [IsClientUser]
 
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 class UserListCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
@@ -42,6 +48,12 @@ class UserListCreateView(generics.ListCreateAPIView):
         if self.request.method == 'POST':
             self.permission_classes = [AllowAny]
         return super().get_permissions()
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 class ObtainTokenPairWithRoleView(APIView):
     permission_classes = (AllowAny,)
@@ -56,7 +68,6 @@ class ObtainTokenPairWithRoleView(APIView):
             "access": str(refresh.access_token),
             "role": user.role
         })
-        
 
 class PasswordResetRequestView(APIView):
     serializer_class = PasswordResetSerializer
@@ -67,8 +78,6 @@ class PasswordResetRequestView(APIView):
             serializer.save()
             return Response({'success': 'Password reset email has been sent.'}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    
 
 def password_reset_confirm(request, uidb64, token):
     try:
@@ -91,3 +100,17 @@ def password_reset_confirm(request, uidb64, token):
     else:
         messages.error(request, 'The password reset link is invalid or has expired.')
         return redirect('password_reset')  # Redirect to password reset request page
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data["user"]
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+            "role": user.role
+        })

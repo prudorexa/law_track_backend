@@ -11,6 +11,4 @@ urlpatterns = [
     path('api/lawyer/schedules/', views.LawyerScheduleListView.as_view(), name='lawyer-schedule-list'),
     path('api/lawyer/schedules/<int:pk>/', views.LawyerScheduleDetailView.as_view(), name='lawyer-schedule-detail'),
     path('api/client/cases/', views.ClientCaseListView.as_view(), name='client-case-list'),
-    path('api/client/communications/', views.ClientCommunicationListView.as_view(), name='client-communication-list'),
-    path('api/client/communications/<int:pk>/', views.ClientCommunicationDetailView.as_view(), name='client-communication-detail'),
 ]

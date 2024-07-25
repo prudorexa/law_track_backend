@@ -33,12 +33,11 @@ class Service(models.Model):
 class Lawyer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    email = models.EmailField()
+    email = models.EmailField(null=True)
 
     def __str__(self):
         return self.name
     
-
 
 class Case(models.Model):
     STATUS_CHOICES = [

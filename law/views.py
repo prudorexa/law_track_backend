@@ -1,7 +1,7 @@
 # Create your views here.
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAdminUser, AllowAny
 from .models import UserProfile, Case, Schedule, Report
 from .serializers import UserSerializer, CaseSerializer, ScheduleSerializer, ReportSerializer
 from law.models import Report
@@ -66,7 +66,7 @@ class AdminReportDetailView(generics.RetrieveUpdateDestroyAPIView):
 class LawyerCaseListView(generics.ListCreateAPIView):
     queryset = Case.objects.all()
     serializer_class = CaseSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
     def get_queryset(self):
         return Case.objects.filter(assigned_lawyer=self.request.user)
@@ -81,7 +81,7 @@ class LawyerCaseListView(generics.ListCreateAPIView):
 class LawyerCaseDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Case.objects.all()
     serializer_class = CaseSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
     def put(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -96,7 +96,7 @@ class LawyerCaseDetailView(generics.RetrieveUpdateDestroyAPIView):
 class LawyerScheduleListView(generics.ListCreateAPIView):
     queryset = Schedule.objects.all()
     serializer_class = ScheduleSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
     def get_queryset(self):
         return Schedule.objects.filter(assigned_lawyer=self.request.user)
@@ -111,7 +111,7 @@ class LawyerScheduleListView(generics.ListCreateAPIView):
 class LawyerScheduleDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Schedule.objects.all()
     serializer_class = ScheduleSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
     def put(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -127,7 +127,7 @@ class LawyerScheduleDetailView(generics.RetrieveUpdateDestroyAPIView):
 class ClientCaseListView(generics.ListAPIView):
     queryset = Case.objects.all()
     serializer_class = CaseSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
     def get_queryset(self):
         return Case.objects.filter(client=self.request.user)

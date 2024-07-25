@@ -1,10 +1,9 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.decorators import api_view
 from django.http import Http404
-
 from .models import Service, Case, Lawyer, Message, Notification, Document, Billing
 from .serializers import ServiceSerializer, CaseSerializer, LawyerSerializer, MessageSerializer, NotificationSerializer, DocumentSerializer, BillingSerializer
 
@@ -214,7 +213,7 @@ class DocumentDetail(APIView):
 
 # Message Views
 class MessageListCreateView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request):
         user = request.user
@@ -235,7 +234,7 @@ class MessageListCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class MessageDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_object(self, pk):
         try:
@@ -263,7 +262,7 @@ class MessageDetailView(APIView):
 
 # Notification Views
 class NotificationListCreateView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request):
         notifications = Notification.objects.all()
@@ -278,7 +277,7 @@ class NotificationListCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class NotificationDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_object(self, pk):
         try:

@@ -9,3 +9,7 @@
 # admin.site.register(Case)
 # admin.site.register(Message)
 # admin.site.register(Notification)
+from django.contrib import admin
+from .models import Lawyer
+
+admin.site.register(Lawyer)

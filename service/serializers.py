@@ -1,6 +1,7 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Service, Case, Lawyer, Message, Notification, Document, Billing
+from .models import Service, Case, Lawyer, Message, Notification, Document, Billing, Schedule
+from django.contrib.auth.models import User
 
 
 class ServiceSerializer(serializers.ModelSerializer):
@@ -9,9 +10,10 @@ class ServiceSerializer(serializers.ModelSerializer):
         fields =  '__all__'
 
 class LawyerSerializer(serializers.ModelSerializer):
+    user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='user', allow_null=True)
     class Meta:
         model = Lawyer
-        fields = ['id', 'name', 'email']
+        fields = ['id', 'name', 'email', 'user_id']
 
 class BillingSerializer(serializers.ModelSerializer):
     class Meta:
@@ -48,3 +50,8 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = '__all__'
+
+class ScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Schedule
+        fields = ['id', 'title', 'date', 'description', 'assigned_lawyer', 'case']

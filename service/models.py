@@ -33,11 +33,12 @@ class Service(models.Model):
 class Lawyer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    email = models.EmailField(null=True)
+    email = models.EmailField(unique=True)
 
     def __str__(self):
         return self.name
     
+
 
 class Case(models.Model):
     STATUS_CHOICES = [
@@ -91,4 +92,12 @@ class Notification(models.Model):
 
     def __str__(self):
         return f'{self.user}: {self.message.subject[:20]}'
-    
+class Schedule(models.Model):
+    title = models.CharField(max_length=200)
+    date = models.DateField()
+    description = models.TextField()
+    assigned_lawyer = models.ForeignKey(Lawyer, on_delete=models.CASCADE)
+    case = models.ForeignKey(Case, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title

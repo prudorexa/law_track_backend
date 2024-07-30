@@ -1,7 +1,6 @@
 # serializers.py
 from rest_framework import serializers
 from .models import Service, Case, Lawyer, Message, Notification, Document, Billing, Schedule
-from django.contrib.auth.models import User
 
 
 class ServiceSerializer(serializers.ModelSerializer):
@@ -10,10 +9,9 @@ class ServiceSerializer(serializers.ModelSerializer):
         fields =  '__all__'
 
 class LawyerSerializer(serializers.ModelSerializer):
-    user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='user', allow_null=True)
     class Meta:
         model = Lawyer
-        fields = ['id', 'name', 'email', 'user_id']
+        fields = ['id', 'name', 'email']
 
 class BillingSerializer(serializers.ModelSerializer):
     class Meta:

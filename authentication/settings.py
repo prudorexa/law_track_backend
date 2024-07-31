@@ -71,10 +71,12 @@ MIDDLEWARE = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Adjust to your frontend's domain
+    "http://localhost:5173",
+    "https://law-track-frontend-9k1y.vercel.app/"  # Adjust to your frontend's domain
 ]
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:5173',  # Adjust to your frontend's domain
+    'http://localhost:5173',
+    "https://law-track-frontend-9k1y.vercel.app/"  # Adjust to your frontend's domain
 ]
 
 ROOT_URLCONF = 'authentication.urls'

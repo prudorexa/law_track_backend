@@ -2,9 +2,9 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('billings/create/', create_billing, name='create_billing'),
-    path('billings/', BillingListCreateAPIView.as_view(), name='billing_list_create'),
-    path('billings/<int:pk>/', BillingDetailAPIView.as_view(), name='billing_detail'),
+    path('billing/create/', create_billing, name='create_billing'),
+    path('billing/', BillingListCreateAPIView.as_view(), name='billing_list_create'),
+    path('billing/<int:pk>/', BillingDetailAPIView.as_view(), name='billing_detail'),
     path('services/', ServiceListCreate.as_view(), name='service_list_create'),
     path('services/<int:pk>/', ServiceDetail.as_view(), name='service_detail'),
     path('cases/', CaseListCreateAPIView.as_view(), name='case_list_create'),
